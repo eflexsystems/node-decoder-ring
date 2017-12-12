@@ -1,19 +1,18 @@
-FieldDecoder = require("./FieldDecoder")
-FieldEncoder = require("./FieldEncoder")
+fieldDecoder = require("./FieldDecoder")
+fieldEncoder = require("./FieldEncoder")
 defaults     = require('lodash.defaults')
 
 class DecoderRing
-  constructor: (@fieldDecoder = new FieldDecoder, @fieldEncoder = new FieldEncoder) ->
-
   decode: (buffer, spec, options = {}) ->
     defaults(options, noAssert: false)
 
     obj = {}
 
-    if spec.bigEndian
-      decodeFun = @fieldDecoder.decodeFieldBE
-    else
-      decodeFun = @fieldDecoder.decodeFieldLE
+    decodeFun =
+      if spec.bigEndian
+        fieldDecoder.decodeFieldBE
+      else
+        fieldDecoder.decodeFieldLE
 
     for field in spec.fields
       obj[field.name] = decodeFun(buffer, field, options.noAssert)
@@ -25,14 +24,14 @@ class DecoderRing
       noAssert: false
       padding:  null
 
-    size = spec.length ? @fieldEncoder.findSpecBufferSize(spec)
+    size = spec.length ? fieldEncoder.findSpecBufferSize(spec)
     buffer = Buffer.alloc(size)
 
     encodeFun =
       if spec.bigEndian
-        @fieldEncoder.encodeFieldBE
+        fieldEncoder.encodeFieldBE
       else
-        @fieldEncoder.encodeFieldLE
+        fieldEncoder.encodeFieldLE
 
     bitFieldAccumulator = {}
 

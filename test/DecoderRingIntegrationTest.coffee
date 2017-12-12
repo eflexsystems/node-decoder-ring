@@ -4,7 +4,7 @@ DecoderRing = require("../src/DecoderRing")
 
 describe "BinaryDecoderRing Integration Test", ->
   beforeEach ->
-    @subject = new DecoderRing
+    @subject = new DecoderRing()
     {@bufferBE, @bufferLE, @bufferBESpec, @bufferLESpec} = require("./Fixtures")
 
   describe "#decode", ->
@@ -77,7 +77,6 @@ describe "BinaryDecoderRing Integration Test", ->
       encoded = @subject.encode(decoded, @bufferBESpec)
       expect(encoded).to.deep.equal(@bufferBE)
 
-
     it "encodes little endian specifications", ->
       decoded = @subject.decode(@bufferLE, @bufferLESpec)
       encoded = @subject.encode(decoded, @bufferLESpec)
@@ -133,5 +132,29 @@ describe "BinaryDecoderRing Integration Test", ->
 
       expect(error).to.exist
 
+    it "fills buffers with 0's", ->
+      bufferSize50With0s = Buffer.alloc(50)
 
+      spec = {
+        bigEndian: false
+        length: 50
+        fields: [
+          {name: "field1", start: 0,  type: 'bit', position: 0  }
+        ]
+      }
+
+      result = @subject.encode({}, spec)
+
+      expect(result).to.deep.equal(bufferSize50With0s)
+
+    it "doesn't calculate the size if a length field is in the spec", ->
+      spec =
+        length: 2
+        fields: [
+          { name: "field1", start: 0, type: 'int8' }
+        ]
+
+      result = @subject.encode(field1: 11, spec)
+
+      expect(result).to.have.length(2)
 

@@ -1,4 +1,4 @@
-class FieldDecoder
+module.exports =
   decodeFieldBE: (buffer, fieldSpec, noAssert = false) ->
     switch fieldSpec.type
       when 'int8'   then buffer.readInt8(fieldSpec.start, noAssert)
@@ -15,7 +15,6 @@ class FieldDecoder
       when 'bit'
         i = buffer.readUInt8(fieldSpec.start, noAssert)
         (i & 2 ** fieldSpec.position) > 0
-#TODO error case
 
   decodeFieldLE: (buffer, fieldSpec, noAssert = false) ->
     switch fieldSpec.type
@@ -33,6 +32,4 @@ class FieldDecoder
       when 'bit'
         i = buffer.readUInt8(fieldSpec.start, noAssert)
         (i & 2 ** fieldSpec.position) > 0
-#TODO error case
 
-module.exports = FieldDecoder
