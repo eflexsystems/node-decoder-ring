@@ -1,7 +1,6 @@
-var DecoderRing = require("decoder-ring");
-var decoderRing = new DecoderRing();
+const decoderRing = require("decoder-ring");
 
-var bufferBE = Buffer.alloc(51);
+let bufferBE = Buffer.alloc(51);
 bufferBE.writeInt8(-127, 0);
 bufferBE.writeUInt8(254, 1);
 bufferBE.writeInt16BE(5327, 2);
@@ -15,10 +14,10 @@ bufferBE.writeUInt32BE(79001, 38);
 bufferBE.writeInt32BE(-79001, 42);
 bufferBE.writeInt8(1, 46);
 
-var testBuffer = new Buffer("test");
+let testBuffer = new Buffer("test");
 testBuffer.copy(bufferBE, 47, 0, 4);
 
-var spec = {
+let spec = {
   bigEndian: true,
   fields: [
     { name: "field1", start: 0,   type: 'int8'  },
@@ -40,17 +39,17 @@ var spec = {
 };
 
 // Decode the buffer into a javascript object
-var result = decoderRing.decode(bufferBE, spec);
+let result = decoderRing.decode(spec, bufferBE);
 console.log(result);
 
 // Assign field14 to undefined to test default value on encoding
 result.field14 = undefined;
 
 // Encode the object to a buffer
-var buffer = decoderRing.encode(result, spec);
+let buffer = decoderRing.encode(spec, result);
 console.log(buffer);
 
 // Decode buffer to object and check field14 for default value
-var resultWithDefaultValue = decoderRing.decode(buffer, spec);
+let resultWithDefaultValue = decoderRing.decode(spec, buffer);
 console.log("Field14 default value: " + resultWithDefaultValue.field14);
 

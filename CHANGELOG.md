@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 5.0.0 (2019-07-18)
+ - Update dependencies
+ - Swap buffer and spec arguments in decode function
+ - Swap object and spec arguments in encode function
+ - Convert from a class to a module with plain functions
+
 ## 4.0.0 (2017-04-20)
  - Update to coffeescript 2
 
