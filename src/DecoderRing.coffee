@@ -2,7 +2,7 @@ fieldDecoder = require("./FieldDecoder")
 fieldEncoder = require("./FieldEncoder")
 defaults     = require('lodash.defaults')
 
-class DecoderRing
+module.exports =
   decode: (spec, buffer) ->
     obj = {}
 
@@ -51,4 +51,3 @@ class DecoderRing
 
     return buffer
 
-module.exports = DecoderRing
