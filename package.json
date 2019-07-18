@@ -1,6 +1,6 @@
 {
   "name": "eflex-decoder-ring",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "Decode binary buffers using a JSON specification",
   "main": "lib/DecoderRing.js",
   "scripts": {
