@@ -3,7 +3,7 @@ fieldEncoder = require("./FieldEncoder")
 defaults     = require('lodash.defaults')
 
 class DecoderRing
-  decode: (buffer, spec) ->
+  decode: (spec, buffer) ->
     obj = {}
 
     decodeFun =
@@ -17,7 +17,7 @@ class DecoderRing
 
     return obj
 
-  encode: (obj, spec, options = {}) ->
+  encode: (spec, obj, options = {}) ->
     defaults options,
       padding:  null
 

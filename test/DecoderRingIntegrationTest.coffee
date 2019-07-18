@@ -9,8 +9,7 @@ describe "BinaryDecoderRing Integration Test", ->
 
   describe "#decode", ->
     it "decodes big endian specifications", ->
-
-      result = @subject.decode(@bufferBE, @bufferBESpec)
+      result = @subject.decode(@bufferBESpec, @bufferBE)
 
       expect(result.field1).to.equal(-127)
       expect(result.field2).to.equal(254)
@@ -28,7 +27,7 @@ describe "BinaryDecoderRing Integration Test", ->
       expect(result.field14).to.eql(Buffer.from("test"))
 
     it "decodes little endian specifications", ->
-      result = @subject.decode(@bufferLE, @bufferLESpec)
+      result = @subject.decode(@bufferLESpec, @bufferLE)
 
       expect(result.field1).to.equal(-127)
       expect(result.field2).to.equal(254)
@@ -47,13 +46,13 @@ describe "BinaryDecoderRing Integration Test", ->
 
   describe "#encode", ->
     it "encodes big endian specifications", ->
-      decoded = @subject.decode(@bufferBE, @bufferBESpec)
-      encoded = @subject.encode(decoded, @bufferBESpec)
+      decoded = @subject.decode(@bufferBESpec, @bufferBE)
+      encoded = @subject.encode(@bufferBESpec, decoded)
       expect(encoded).to.deep.equal(@bufferBE)
 
     it "encodes little endian specifications", ->
-      decoded = @subject.decode(@bufferLE, @bufferLESpec)
-      encoded = @subject.encode(decoded, @bufferLESpec)
+      decoded = @subject.decode(@bufferLESpec, @bufferLE)
+      encoded = @subject.encode(@bufferLESpec, decoded)
       expect(encoded).to.deep.equal(@bufferLE)
 
     it "encodes bit fields by anding them together", ->
@@ -74,7 +73,7 @@ describe "BinaryDecoderRing Integration Test", ->
         field4: true
       }
 
-      decoded = @subject.encode(obj, spec)
+      decoded = @subject.encode(spec, obj)
       shouldBe = Buffer.alloc(2)
       shouldBe.writeInt8(3, 0)
       shouldBe.writeInt8(8, 1)
@@ -91,7 +90,7 @@ describe "BinaryDecoderRing Integration Test", ->
         ]
       }
 
-      result = @subject.encode({}, spec)
+      result = @subject.encode(spec, {})
 
       expect(result).to.deep.equal(bufferSize50With0s)
 
@@ -102,7 +101,7 @@ describe "BinaryDecoderRing Integration Test", ->
           { name: "field1", start: 0, type: 'int8' }
         ]
 
-      result = @subject.encode(field1: 11, spec)
+      result = @subject.encode(spec, field1: 11)
 
       expect(result).to.have.length(2)
 
