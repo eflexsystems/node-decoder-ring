@@ -3,9 +3,7 @@ fieldEncoder = require("./FieldEncoder")
 defaults     = require('lodash.defaults')
 
 class DecoderRing
-  decode: (buffer, spec, options = {}) ->
-    defaults(options, noAssert: false)
-
+  decode: (buffer, spec) ->
     obj = {}
 
     decodeFun =
@@ -15,13 +13,12 @@ class DecoderRing
         fieldDecoder.decodeFieldLE
 
     for field in spec.fields
-      obj[field.name] = decodeFun(buffer, field, options.noAssert)
+      obj[field.name] = decodeFun(buffer, field)
 
     return obj
 
   encode: (obj, spec, options = {}) ->
     defaults options,
-      noAssert: false
       padding:  null
 
     size = spec.length ? fieldEncoder.findSpecBufferSize(spec)
@@ -41,7 +38,7 @@ class DecoderRing
         currentVal = bitFieldAccumulator["#{fieldSpec.start}"] || 0
         bitFieldAccumulator["#{fieldSpec.start}"] = currentVal + val
       else
-        buffer = encodeFun(buffer, obj, fieldSpec, options.noAssert, options.padding)
+        buffer = encodeFun(buffer, obj, fieldSpec, options.padding)
 
     # encode all the bit fields that we accumulated
     for r in Object.keys(bitFieldAccumulator)
@@ -49,7 +46,6 @@ class DecoderRing
         buffer,
         bitFieldAccumulator,
         { name: r, start: parseInt(r), type: 'uint8' },
-        options.noAssert,
         options.padding
       )
 

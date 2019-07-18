@@ -72,12 +72,10 @@ All fields must have a name, a starting byte, and a type. The name is used for a
 
 ### API
 
-decode: (buffer, spec, { noAssert = false })
-  * set noAssert to true to ignore validation of offsets
+decode: (buffer, spec)
 
-encode: (obj, spec, { noAssert = false, padding = null })
+encode: (obj, spec, { padding = null })
   * set padding to a character to right pad ascii and utf8 strings instead of using null termination
-  * set noAssert to true to ignore validation of written values and offsets
 
 ### Example
 

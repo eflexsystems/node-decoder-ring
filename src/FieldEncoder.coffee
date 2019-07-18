@@ -18,7 +18,7 @@ findSpecBufferSize = (spec) ->
 
   sizes.reduce((a, b) -> Math.max(a, b))
 
-encodeFieldBE = (buffer, obj, fieldSpec, noAssert, padding) ->
+encodeFieldBE = (buffer, obj, fieldSpec, padding) ->
   val = obj[fieldSpec.name]
 
   if !val? and fieldSpec.default?
@@ -26,14 +26,14 @@ encodeFieldBE = (buffer, obj, fieldSpec, noAssert, padding) ->
 
   if val?
     switch fieldSpec.type
-      when 'int8'   then buffer.writeInt8(val, fieldSpec.start, noAssert)
-      when 'uint8'  then buffer.writeUInt8(val, fieldSpec.start, noAssert)
-      when 'int16'  then buffer.writeInt16BE(val, fieldSpec.start, noAssert)
-      when 'uint16' then buffer.writeUInt16BE(val, fieldSpec.start, noAssert)
-      when 'float'  then buffer.writeFloatBE(val, fieldSpec.start, noAssert)
-      when 'double' then buffer.writeDoubleBE(val, fieldSpec.start, noAssert)
-      when 'uint32' then buffer.writeUInt32BE(val, fieldSpec.start, noAssert)
-      when 'int32'  then buffer.writeInt32BE(val, fieldSpec.start, noAssert)
+      when 'int8'   then buffer.writeInt8(val, fieldSpec.start)
+      when 'uint8'  then buffer.writeUInt8(val, fieldSpec.start)
+      when 'int16'  then buffer.writeInt16BE(val, fieldSpec.start)
+      when 'uint16' then buffer.writeUInt16BE(val, fieldSpec.start)
+      when 'float'  then buffer.writeFloatBE(val, fieldSpec.start)
+      when 'double' then buffer.writeDoubleBE(val, fieldSpec.start)
+      when 'uint32' then buffer.writeUInt32BE(val, fieldSpec.start)
+      when 'int32'  then buffer.writeInt32BE(val, fieldSpec.start)
       when 'buffer' then val.copy(buffer, fieldSpec.start, 0, fieldSpec.length)
 
       when 'ascii', 'utf8'
@@ -44,13 +44,13 @@ encodeFieldBE = (buffer, obj, fieldSpec, noAssert, padding) ->
 
       when 'bit'
         if val is true # protection from type problems
-          buffer.writeUInt8(2 ** fieldSpec.position, fieldSpec.start, noAssert)
+          buffer.writeUInt8(2 ** fieldSpec.position, fieldSpec.start)
         else
-          buffer.writeUInt8(0, fieldSpec.start, noAssert)
+          buffer.writeUInt8(0, fieldSpec.start)
 
   return buffer
 
-encodeFieldLE = (buffer, obj, fieldSpec, noAssert, padding) ->
+encodeFieldLE = (buffer, obj, fieldSpec, padding) ->
   val = obj[fieldSpec.name]
 
   if !val? and fieldSpec.default?
@@ -58,14 +58,14 @@ encodeFieldLE = (buffer, obj, fieldSpec, noAssert, padding) ->
 
   if val?
     switch fieldSpec.type
-      when 'int8'   then buffer.writeInt8(val, fieldSpec.start, noAssert)
-      when 'uint8'  then buffer.writeUInt8(val, fieldSpec.start, noAssert)
-      when 'int16'  then buffer.writeInt16LE(val, fieldSpec.start, noAssert)
-      when 'uint16' then buffer.writeUInt16LE(val, fieldSpec.start, noAssert)
-      when 'float'  then buffer.writeFloatLE(val, fieldSpec.start, noAssert)
-      when 'double' then buffer.writeDoubleLE(val, fieldSpec.start, noAssert)
-      when 'uint32' then buffer.writeUInt32LE(val, fieldSpec.start, noAssert)
-      when 'int32'  then buffer.writeInt32LE(val, fieldSpec.start, noAssert)
+      when 'int8'   then buffer.writeInt8(val, fieldSpec.start)
+      when 'uint8'  then buffer.writeUInt8(val, fieldSpec.start)
+      when 'int16'  then buffer.writeInt16LE(val, fieldSpec.start)
+      when 'uint16' then buffer.writeUInt16LE(val, fieldSpec.start)
+      when 'float'  then buffer.writeFloatLE(val, fieldSpec.start)
+      when 'double' then buffer.writeDoubleLE(val, fieldSpec.start)
+      when 'uint32' then buffer.writeUInt32LE(val, fieldSpec.start)
+      when 'int32'  then buffer.writeInt32LE(val, fieldSpec.start)
       when 'buffer' then val.copy(buffer, fieldSpec.start, 0, fieldSpec.length)
 
       when 'ascii', 'utf8'
@@ -76,9 +76,9 @@ encodeFieldLE = (buffer, obj, fieldSpec, noAssert, padding) ->
 
       when 'bit'
         if val is true # protection from type problems
-          buffer.writeUInt8(2 ** fieldSpec.position, fieldSpec.start, noAssert)
+          buffer.writeUInt8(2 ** fieldSpec.position, fieldSpec.start)
         else
-          buffer.writeUInt8(0, fieldSpec.start, noAssert)
+          buffer.writeUInt8(0, fieldSpec.start)
 
   return buffer
 
